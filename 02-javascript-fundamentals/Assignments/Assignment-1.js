@@ -25,7 +25,7 @@ TEST DATA 2: Dolphins scored 85, 54, and 41. Koalas scored 23, 34, and 27.
 
 */
 "use strict";
-const calcAverage = (score1, score2, score3) => score1 + score2 + score3 / 3;
+const calcAverage = (score1, score2, score3) => (score1 + score2 + score3) / 3;
 let scoreDolphins = calcAverage(44, 23, 71);
 let scoreKoalas = calcAverage(65, 54, 49);
 
