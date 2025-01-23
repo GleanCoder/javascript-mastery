@@ -16,80 +16,82 @@ const newBtn = document.querySelector('.btn--new');
 const rollBtn = document.querySelector('.btn--roll');
 const holdBtn = document.querySelector('.btn--hold');
 
-// Others
+// others
 const diceEl = document.querySelector('.dice');
-const scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0;
-let playing = true;
-document.querySelectorAll('.score').forEach(score => {
-  score.textContent = currentScore;
-});
-//Game Logic
-diceEl.classList.add('hidden');
+
+// game Init
+
+let curentScore, activePlayer, scores, playing;
+
+function init() {
+  score0El.textContent = 0;
+  score1El.textContent = 0;
+  currentScore0.textContent = 0;
+  currentScore1.textContent = 0;
+
+  curentScore = 0;
+  activePlayer = 0;
+  scores = [0, 0];
+  playing = true;
+
+  diceEl.classList.add('hidden');
+  player0El.classList.remove('player--winner');
+  player1El.classList.remove('player--winner');
+  player0El.classList.add('player--active');
+  player1El.classList.remove('player--active');
+}
+init();
 
 //Switching Player
-
 function switchPlayer() {
   document.getElementById(`current--${activePlayer}`).textContent = 0;
-  currentScore = 0;
+  curentScore = 0;
   activePlayer = activePlayer === 0 ? 1 : 0;
   player0El.classList.toggle('player--active');
   player1El.classList.toggle('player--active');
 }
+// Game Logic
 
-//Rolling the Dice
-
+// Roll Button
 rollBtn.addEventListener('click', function () {
   if (playing) {
-    const randomDice = Math.trunc(Math.random() * 6) + 1;
-    console.log(randomDice);
-    diceEl.src = `dice-${randomDice}.png`;
+    const dice = Math.trunc(Math.random() * 6) + 1;
+    diceEl.src = `dice-${dice}.png`;
     diceEl.classList.remove('hidden');
 
-    if (randomDice !== 1) {
-      currentScore += randomDice;
+    if (dice !== 1) {
+      curentScore += dice;
       document.getElementById(`current--${activePlayer}`).textContent =
-        currentScore;
+        curentScore;
     } else {
       switchPlayer();
     }
   }
 });
 
-// Hold the Score
+// Hold Button
+
 holdBtn.addEventListener('click', function () {
   if (playing) {
-    scores[activePlayer] += currentScore;
+    scores[activePlayer] += curentScore;
     document.getElementById(`score--${activePlayer}`).textContent =
       scores[activePlayer];
-
     if (scores[activePlayer] >= 20) {
       playing = false;
       diceEl.classList.add('hidden');
+      document.getElementById(`current--${activePlayer}`).textContent = 0;
       document
         .querySelector(`.player--${activePlayer}`)
         .classList.add('player--winner');
+      document
+        .querySelector(`.player--${activePlayer}`)
+        .classList.remove('player--active');
     } else {
       switchPlayer();
     }
   }
 });
 
-// New Game or Reset the Game{}
-newBtn.addEventListener('click', function () {
-  playing = true;
-  currentScore = 0;
-  activePlayer = 0;
-  // scores = [0, 0];
-  document.querySelectorAll('.score, .current-score').forEach(score => {
-    score.textContent = currentScore;
-  });
+//New Game Button
 
-  document
-    .querySelector(`.player--${activePlayer}`)
-    .classList.remove('player--winner');
-  document
-    .querySelector(`.player--${activePlayer}`)
-    .classList.add('player--active');
-});
+newBtn.addEventListener('click', init);
